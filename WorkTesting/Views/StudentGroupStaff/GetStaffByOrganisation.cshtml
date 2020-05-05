@@ -1,0 +1,8 @@
+﻿@model WorkTesting.Models.Staff
+
+@foreach (var item in ViewBag.Staff) 
+{
+    <option value="@item.Id">@item.Name</option>
+}
+
+

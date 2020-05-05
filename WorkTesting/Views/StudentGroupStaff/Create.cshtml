@@ -1,0 +1,80 @@
+﻿@model WorkTesting.Models.StudentGroupsStaff
+
+@{
+    ViewBag.Title = "Create";
+
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Студенты в группе</h4>
+        <div class="form-group">
+            Учебная группа- @TempData["studentGroupName"]
+        </div>
+        <div class="form-group">
+            Преподаватель - @TempData["studentGroupTeacher"]
+        </div>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        Организация - <div class="form-group">
+
+            <div class="col-md-10">
+
+                @Html.DropDownListFor(model => model.OrganisationId, ViewBag.Organisations as SelectList, "", htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        Студент - <div class="form-group">
+
+                      <div class="col-md-10">
+                          @Html.DropDownListFor(model => model.EmployeeId, new SelectList(""), htmlAttributes: new { @class = "form-control" })
+
+
+                          <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+                          <script>
+                              $(document).ready(function () {
+                                  $("#OrganisationId").change(function () {
+                                      var OrganisationId = $(this).val();
+                                      
+                                      debugger
+                                      $.ajax(
+                                          {
+                                              type: "post",
+                                              url: "/StudentGroupStaff/GetStaffByOrganisation?organisationId=" + OrganisationId +"&studentGroupId="+@Model.StudentGroupId,
+                                              contentType: "application/json; charset=utf-8",
+                                              dataType: "html",
+                                              success: function (response) {
+                                                  debugger
+                                                  $("#EmployeeId").empty();
+                                                  $("#EmployeeId").append(response);
+                                              }
+                                          })
+                                  })
+                              })
+                          </script>
+                      </div>
+        </div>
+
+        @Html.HiddenFor(model => model.StudentGroupId);
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Edit/" + Model.StudentGroupId, "StudentGroups")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
