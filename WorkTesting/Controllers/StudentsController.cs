@@ -8,26 +8,26 @@ using WorkTesting.Models;
 
 namespace WorkTesting.Controllers
 {
-    public class StudentGroupStaffController : Controller
+    public class StudentsController : Controller
     {
-        private Model1 db = new Model1();
+        private StudentGroupsContext db = new StudentGroupsContext();
         
         // GET: StudentGroupStaff
-        public ActionResult Index(StudentGroups studentGroups)
+        public ActionResult Index(StudentGroup studentGroups)
         {
             TempData["studentGroupId"] = studentGroups.Id;
             TempData["studentGroupName"] = studentGroups.Name;
             TempData["studentGroupTeacher"] = db.Teachers.Find(studentGroups.TeacherId).Name;
             TempData["studentGroupTeacherId"] = db.Teachers.Find(studentGroups.TeacherId).Id;
 
-            return PartialView(db.StudentGroupsStaff.ToList().Where(x => x.StudentGroupId == studentGroups.Id));
+            return PartialView(db.StudentsInGroups.ToList().Where(x => x.StudentGroupId == studentGroups.Id));
         }
 
         
         public ActionResult Create()
         {
             
-            StudentGroupsStaff studentGroupsStaff = new StudentGroupsStaff();
+            StudentInGroup studentGroupsStaff = new StudentInGroup();
             if (TempData["studentGroupId"] != null) 
             {
             studentGroupsStaff.StudentGroupId = Convert.ToInt32(TempData["studentGroupId"]);
@@ -43,10 +43,10 @@ namespace WorkTesting.Controllers
 
         public ActionResult GetStaffByOrganisation(int organisationId, int studentGroupId) 
         {  
-            List<StudentGroupsStaff> students = db.StudentGroupsStaff.Where(x => x.StudentGroupId == studentGroupId).ToList();
+            List<StudentInGroup> students = db.StudentsInGroups.Where(x => x.StudentGroupId == studentGroupId).ToList();
           
-            List<Staff> staff = db.Staff.Where(x => x.OrganisationId == organisationId).ToList();
-            List<Staff> result = new List<Staff>();
+            List<Student> staff = db.Students.Where(x => x.OrganisationId == organisationId).ToList();
+            List<Student> result = new List<Student>();
             for (int j = 0; j < staff.Count(); j++) 
             {
                 for (int i = 0; i < students.Count(); i++) 
@@ -69,11 +69,11 @@ namespace WorkTesting.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EmployeeId, StudentGroupId, OrganisationId")] StudentGroupsStaff studentGroupsStaff)
+        public ActionResult Create([Bind(Include = "EmployeeId, StudentGroupId, OrganisationId")] StudentInGroup studentGroupsStaff)
         {
             if (ModelState.IsValid)
             {
-                db.StudentGroupsStaff.Add(studentGroupsStaff);
+                db.StudentsInGroups.Add(studentGroupsStaff);
                 db.SaveChanges();
                 return RedirectToAction("Edit/"+ studentGroupsStaff.StudentGroupId, "StudentGroups");
             }
@@ -91,7 +91,7 @@ namespace WorkTesting.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             
-            StudentGroupsStaff studentGroupsStaff = db.StudentGroupsStaff.Find(id);
+            StudentInGroup studentGroupsStaff = db.StudentsInGroups.Find(id);
 
             if (studentGroupsStaff == null)
             {
@@ -106,9 +106,9 @@ namespace WorkTesting.Controllers
         public ActionResult Delete(int id)
         {
             
-            StudentGroupsStaff studentGroupsStaff = db.StudentGroupsStaff.Find(id);
+            StudentInGroup studentGroupsStaff = db.StudentsInGroups.Find(id);
             int? studentGroupId = studentGroupsStaff.StudentGroupId;
-            db.StudentGroupsStaff.Remove(studentGroupsStaff);
+            db.StudentsInGroups.Remove(studentGroupsStaff);
             db.SaveChanges();
             return RedirectToAction("Edit/"+studentGroupId,"StudentGroups");
         }

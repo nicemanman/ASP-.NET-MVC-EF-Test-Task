@@ -1,4 +1,4 @@
-﻿@model WorkTesting.Models.StudentGroupsStaff
+﻿@model WorkTesting.Models.StudentInGroup
 
 @{
     ViewBag.Title = "Create";
@@ -47,7 +47,7 @@
                                       $.ajax(
                                           {
                                               type: "post",
-                                              url: "/StudentGroupStaff/GetStaffByOrganisation?organisationId=" + OrganisationId +"&studentGroupId="+@Model.StudentGroupId,
+                                              url: "/Students/GetStaffByOrganisation?organisationId=" + OrganisationId +"&studentGroupId="+@Model.StudentGroupId,
                                               contentType: "application/json; charset=utf-8",
                                               dataType: "html",
                                               success: function (response) {

@@ -12,7 +12,7 @@ namespace WorkTesting.Controllers
 {
     public class StudentGroupsController : Controller
     {
-        private Model1 db = new Model1();
+        private StudentGroupsContext db = new StudentGroupsContext();
 
         // GET: StudentGroups
         public ActionResult Index()
@@ -28,7 +28,7 @@ namespace WorkTesting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StudentGroups studentGroups = db.StudentGroups.Find(id);
+            StudentGroup studentGroups = db.StudentGroups.Find(id);
             if (studentGroups == null)
             {
                 return HttpNotFound();
@@ -48,7 +48,7 @@ namespace WorkTesting.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,TeacherId")] StudentGroups studentGroups)
+        public ActionResult Create([Bind(Include = "Id,Name,TeacherId")] StudentGroup studentGroups)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace WorkTesting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StudentGroups studentGroups = db.StudentGroups.Find(id);
+            StudentGroup studentGroups = db.StudentGroups.Find(id);
             if (studentGroups == null)
             {
                 return HttpNotFound();
@@ -82,7 +82,7 @@ namespace WorkTesting.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,TeacherId")] StudentGroups studentGroups)
+        public ActionResult Edit([Bind(Include = "Id,Name,TeacherId")] StudentGroup studentGroups)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ namespace WorkTesting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StudentGroups studentGroups = db.StudentGroups.Find(id);
+            StudentGroup studentGroups = db.StudentGroups.Find(id);
             if (studentGroups == null)
             {
                 return HttpNotFound();
@@ -115,16 +115,16 @@ namespace WorkTesting.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             //Очищаем связанную с группой информацию о студентах в группе
-            var query = from com in db.StudentGroupsStaff
+            var query = from com in db.StudentsInGroups
                         where com.StudentGroupId == id
                         select com;
 
-            foreach (StudentGroupsStaff comment in query)
+            foreach (StudentInGroup comment in query)
             { 
                 // тут будет 1 запрос на выборку из бд
-                db.StudentGroupsStaff.Remove(comment);
+                db.StudentsInGroups.Remove(comment);
             }
-            StudentGroups studentGroups = db.StudentGroups.Find(id);
+            StudentGroup studentGroups = db.StudentGroups.Find(id);
             db.StudentGroups.Remove(studentGroups);
             db.SaveChanges();
             return RedirectToAction("Index");

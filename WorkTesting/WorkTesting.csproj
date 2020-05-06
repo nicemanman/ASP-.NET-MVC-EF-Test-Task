@@ -130,17 +130,17 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StudentGroupsController.cs" />
-    <Compile Include="Controllers\StudentGroupStaffController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Disciplines.cs" />
-    <Compile Include="Models\Model1.cs" />
-    <Compile Include="Models\Organisations.cs" />
-    <Compile Include="Models\Staff.cs" />
-    <Compile Include="Models\StudentGroups.cs" />
-    <Compile Include="Models\StudentGroupsStaff.cs" />
-    <Compile Include="Models\Teachers.cs" />
+    <Compile Include="Models\Discipline.cs" />
+    <Compile Include="Models\StudentGroupsContext.cs" />
+    <Compile Include="Models\Organisation.cs" />
+    <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\StudentGroup.cs" />
+    <Compile Include="Models\StudentInGroup.cs" />
+    <Compile Include="Models\Teacher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -187,12 +187,14 @@
     <Content Include="Views\StudentGroups\Details.cshtml" />
     <Content Include="Views\StudentGroups\Edit.cshtml" />
     <Content Include="Views\StudentGroups\Index.cshtml" />
-    <Content Include="Views\StudentGroupStaff\Index.cshtml" />
-    <Content Include="Views\StudentGroupStaff\Create.cshtml" />
-    <Content Include="Views\StudentGroupStaff\Delete.cshtml" />
-    <Content Include="Views\StudentGroupStaff\GetStaffByOrganisation.cshtml" />
+    <Content Include="Views\Students\Index.cshtml" />
+    <Content Include="Views\Students\Create.cshtml" />
+    <Content Include="Views\Students\Delete.cshtml" />
+    <Content Include="Views\Students\GetStaffByOrganisation.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\Repository\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

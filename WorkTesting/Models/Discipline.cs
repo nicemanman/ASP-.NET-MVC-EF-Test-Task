@@ -6,12 +6,12 @@ namespace WorkTesting.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Disciplines
+    public partial class Discipline
     {
         public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Discipline { get; set; }
+        public string Name { get; set; }
     }
 }

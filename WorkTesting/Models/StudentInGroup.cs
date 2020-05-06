@@ -8,7 +8,7 @@ namespace WorkTesting.Models
     using System.Data.Entity.Spatial;
 
     [Table("StudentGroupsStaff")]
-    public partial class StudentGroupsStaff
+    public partial class StudentInGroup
     {
         public int Id { get; set; }
 
@@ -19,9 +19,9 @@ namespace WorkTesting.Models
         [DisplayName("Организация")]
         public int? OrganisationId { get; set; }
 
-        public virtual Organisations Organisations { get; set; }
-        public virtual Staff Staff { get; set; }
+        public virtual Organisation Organisations { get; set; }
+        public virtual Student Staff { get; set; }
 
-        public virtual StudentGroups StudentGroups { get; set; }
+        public virtual StudentGroup StudentGroups { get; set; }
     }
 }

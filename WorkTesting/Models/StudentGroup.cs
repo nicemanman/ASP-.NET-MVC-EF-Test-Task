@@ -4,30 +4,40 @@ namespace WorkTesting.Models
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Staff")]
-    public partial class Staff
+    public partial class StudentGroup
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Staff()
+        public StudentGroup()
         {
-            StudentGroupsStaff = new HashSet<StudentGroupsStaff>();
+            StudentGroupsStaff = new HashSet<StudentInGroup>();
         }
+
+        [DisplayName("Количество студентов")]
+        public int Count 
+        {
+            get 
+            {
+                return StudentGroupsStaff.Where(x => x.StudentGroupId == Id).Count();
+            }
+        }
+
 
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50)]
-        [DisplayName("Имя студента")]
+        [StringLength(20)]
+        [DisplayName("Учебная группа")]
         public string Name { get; set; }
 
-        public int? OrganisationId { get; set; }
+        public int? TeacherId { get; set; }
 
-        public virtual Organisations Organisations { get; set; }
+        public virtual Teacher Teachers { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StudentGroupsStaff> StudentGroupsStaff { get; set; }
+        public virtual ICollection<StudentInGroup> StudentGroupsStaff { get; set; }
     }
 }

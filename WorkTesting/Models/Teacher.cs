@@ -7,29 +7,29 @@ namespace WorkTesting.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Organisations
+    public partial class Teacher
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Organisations()
+        public Teacher()
         {
-            Staff = new HashSet<Staff>();
+            Organisations = new HashSet<Organisation>();
+            StudentGroups = new HashSet<StudentGroup>();
         }
 
         public int Id { get; set; }
 
+        [Required]
         [StringLength(100)]
-        [DisplayName("Организация")]
+        [DisplayName("Преподаватель")]
         public string Name { get; set; }
 
-        [StringLength(12)]
-        public string TIN { get; set; }
-
-        public int? TeacherID { get; set; }
-
-        public virtual Teachers Teachers { get; set; }
+        [StringLength(100)]
+        public string Email { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Staff> Staff { get; set; }
-        public virtual ICollection<StudentGroupsStaff> StudentGroupStaff { get; set; }
+        public virtual ICollection<Organisation> Organisations { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StudentGroup> StudentGroups { get; set; }
     }
 }
