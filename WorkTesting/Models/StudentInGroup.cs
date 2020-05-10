@@ -19,9 +19,9 @@ namespace WorkTesting.Models
         [DisplayName("Организация")]
         public int? OrganisationId { get; set; }
 
-        public virtual Organisation Organisations { get; set; }
-        public virtual Student Staff { get; set; }
+        public virtual Organisation Organisation { get; set; }
+        public virtual Student student { get; set; }
 
-        public virtual StudentGroup StudentGroups { get; set; }
+        public virtual StudentGroup StudentGroup { get; set; }
     }
 }

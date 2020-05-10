@@ -7,18 +7,24 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WorkTesting.Models;
+using WorkTesting.Models.Repository;
 
 namespace WorkTesting.Controllers
 {
     public class StudentGroupsController : Controller
     {
-        private StudentGroupsContext db = new StudentGroupsContext();
-
+        
+        private IRepository<StudentGroup> studentGroupsRepository { get; set; }
+        private IRepository<Teacher> teachersRepository { get; set; }
+        public StudentGroupsController(IRepository<StudentGroup> studentGroupsRepository, IRepository<Teacher> teachersRepository)
+        {
+            this.studentGroupsRepository = studentGroupsRepository;
+            this.teachersRepository = teachersRepository;
+        }
         // GET: StudentGroups
         public ActionResult Index()
         {
-            var studentGroups = db.StudentGroups.Include(s => s.Teachers);
-            return View(studentGroups.ToList());
+            return View(studentGroupsRepository.GetList());
         }
 
         // GET: StudentGroups/Details/5
@@ -28,18 +34,18 @@ namespace WorkTesting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StudentGroup studentGroups = db.StudentGroups.Find(id);
-            if (studentGroups == null)
+            StudentGroup studentGroup = studentGroupsRepository.GetById(id);
+            if (studentGroup == null)
             {
                 return HttpNotFound();
             }
-            return View(studentGroups);
+            return View(studentGroup);
         }
 
         // GET: StudentGroups/Create
         public ActionResult Create()
         {
-            ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Name");
+            ViewBag.TeacherId = new SelectList(teachersRepository.GetList(), "Id", "Name");
             return View();
         }
 
@@ -48,17 +54,16 @@ namespace WorkTesting.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,TeacherId")] StudentGroup studentGroups)
+        public ActionResult Create([Bind(Include = "Id,Name,TeacherId")] StudentGroup studentGroup)
         {
             if (ModelState.IsValid)
             {
-                db.StudentGroups.Add(studentGroups);
-                db.SaveChanges();
-                return RedirectToAction("Edit/"+studentGroups.Id);
+                studentGroupsRepository.Add(studentGroup);
+                return RedirectToAction("Edit/"+studentGroup.Id);
             }
 
-            ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Name", studentGroups.TeacherId);
-            return View(studentGroups);
+            ViewBag.TeacherId = new SelectList(teachersRepository.GetList(), "Id", "Name", studentGroup.TeacherId);
+            return View(studentGroup);
         }
 
         // GET: StudentGroups/Edit/5
@@ -68,13 +73,13 @@ namespace WorkTesting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StudentGroup studentGroups = db.StudentGroups.Find(id);
-            if (studentGroups == null)
+            StudentGroup studentGroup = studentGroupsRepository.GetById(id);
+            if (studentGroup == null)
             {
                 return HttpNotFound();
             }   
-            ViewBag.TeacherName = db.Teachers.Find(studentGroups.TeacherId).Name;
-            return View(studentGroups);
+            ViewBag.TeacherName = studentGroup.TeacherName;
+            return View(studentGroup);
         }
 
         // POST: StudentGroups/Edit/5
@@ -82,16 +87,15 @@ namespace WorkTesting.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,TeacherId")] StudentGroup studentGroups)
+        public ActionResult Edit([Bind(Include = "Id,Name,TeacherId")] StudentGroup studentGroup)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(studentGroups).State = EntityState.Modified;
-                db.SaveChanges();
+                studentGroupsRepository.Update(studentGroup);
                 return RedirectToAction("Index");
             }
-            ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Name", studentGroups.TeacherId);
-            return View(studentGroups);
+            ViewBag.TeacherId = new SelectList(teachersRepository.GetList(), "Id", "Name", studentGroup.TeacherId);
+            return View(studentGroup);
         }
 
         // GET: StudentGroups/Delete/5
@@ -101,12 +105,12 @@ namespace WorkTesting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StudentGroup studentGroups = db.StudentGroups.Find(id);
-            if (studentGroups == null)
+            StudentGroup studentGroup = studentGroupsRepository.GetById(id);
+            if (studentGroup == null)
             {
                 return HttpNotFound();
             }
-            return View(studentGroups);
+            return View(studentGroup);
         }
 
         // POST: StudentGroups/Delete/5
@@ -114,29 +118,10 @@ namespace WorkTesting.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //Очищаем связанную с группой информацию о студентах в группе
-            var query = from com in db.StudentsInGroups
-                        where com.StudentGroupId == id
-                        select com;
-
-            foreach (StudentInGroup comment in query)
-            { 
-                // тут будет 1 запрос на выборку из бд
-                db.StudentsInGroups.Remove(comment);
-            }
-            StudentGroup studentGroups = db.StudentGroups.Find(id);
-            db.StudentGroups.Remove(studentGroups);
-            db.SaveChanges();
+            StudentGroup studentGroup = studentGroupsRepository.GetById(id);
+            studentGroupsRepository.Delete(studentGroup);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

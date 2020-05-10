@@ -40,7 +40,7 @@ namespace WorkTesting.Models
 
             modelBuilder.Entity<Organisation>()
                 .HasMany(e => e.StudentsInGroups)
-                .WithOptional(e => e.Organisations)
+                .WithOptional(e => e.Organisation)
                 .HasForeignKey(e => e.OrganisationId);
 
             modelBuilder.Entity<Student>()
@@ -49,7 +49,7 @@ namespace WorkTesting.Models
 
             modelBuilder.Entity<Student>()
                 .HasMany(e => e.StudentGroupsStaff)
-                .WithOptional(e => e.Staff)
+                .WithOptional(e => e.student)
                 .HasForeignKey(e => e.EmployeeId);
 
             modelBuilder.Entity<StudentGroup>()
@@ -57,8 +57,8 @@ namespace WorkTesting.Models
                 .IsFixedLength();
 
             modelBuilder.Entity<StudentGroup>()
-                .HasMany(e => e.StudentGroupsStaff)
-                .WithOptional(e => e.StudentGroups)
+                .HasMany(e => e.StudentsInGroups)
+                .WithOptional(e => e.StudentGroup)
                 .HasForeignKey(e => e.StudentGroupId);
 
             modelBuilder.Entity<Teacher>()
@@ -76,7 +76,7 @@ namespace WorkTesting.Models
 
             modelBuilder.Entity<Teacher>()
                 .HasMany(e => e.StudentGroups)
-                .WithOptional(e => e.Teachers)
+                .WithOptional(e => e.Teacher)
                 .HasForeignKey(e => e.TeacherId);
         }
     }

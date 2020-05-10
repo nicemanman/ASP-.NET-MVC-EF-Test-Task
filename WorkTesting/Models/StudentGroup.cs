@@ -13,7 +13,7 @@ namespace WorkTesting.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public StudentGroup()
         {
-            StudentGroupsStaff = new HashSet<StudentInGroup>();
+            StudentsInGroups = new HashSet<StudentInGroup>();
         }
 
         [DisplayName("Количество студентов")]
@@ -21,10 +21,17 @@ namespace WorkTesting.Models
         {
             get 
             {
-                return StudentGroupsStaff.Where(x => x.StudentGroupId == Id).Count();
+                return StudentsInGroups.Where(x => x.StudentGroupId == Id).Count();
             }
         }
 
+        public string TeacherName 
+        {
+            get 
+            {
+                return Teacher.Name;
+            }
+        }
 
         public int Id { get; set; }
 
@@ -35,9 +42,9 @@ namespace WorkTesting.Models
 
         public int? TeacherId { get; set; }
 
-        public virtual Teacher Teachers { get; set; }
+        public virtual Teacher Teacher { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StudentInGroup> StudentGroupsStaff { get; set; }
+        public virtual ICollection<StudentInGroup> StudentsInGroups { get; set; }
     }
 }

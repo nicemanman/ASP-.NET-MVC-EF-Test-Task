@@ -52,6 +52,9 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -135,6 +138,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Discipline.cs" />
+    <Compile Include="Models\Ninject\NinjectDependencyResolver.cs" />
+    <Compile Include="Models\Repository\IRepository.cs" />
+    <Compile Include="Models\Repository\StudentGroupsRepository.cs" />
+    <Compile Include="Models\Repository\TeachersRepository.cs" />
     <Compile Include="Models\StudentGroupsContext.cs" />
     <Compile Include="Models\Organisation.cs" />
     <Compile Include="Models\Student.cs" />
@@ -192,9 +199,7 @@
     <Content Include="Views\Students\Delete.cshtml" />
     <Content Include="Views\Students\GetStaffByOrganisation.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Repository\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
